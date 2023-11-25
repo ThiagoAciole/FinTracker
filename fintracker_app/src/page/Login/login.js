@@ -1,38 +1,71 @@
 import { StyleSheet, View, Image } from "react-native";
-import { TextInput, Button } from "react-native-paper";
-import { useState } from "react";
+import { Text, TextInput, Button } from "react-native-paper";
+import { useEffect, useState } from "react";
 import Logo from "../../../assets/logo.png";
 import axios from "axios";
-import qs from "qs"; // Importe o módulo qs
+import qs from "qs";
+
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
+
+import { Platform } from "react-native";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  /*
+  useEffect(async () => {
+    let auth = "";
+    if (Platform.OS === "web") {
+      auth = localStorage.getItem("auth");
+    } else {
+      auth = await AsyncStorage.getItem("auth");
+    }
+    if (auth === "true") {
+      navigation.navigate("Main");
+    }
+  }, [navigation]);
+*/
 
   async function handleLogin() {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/users/login",
-        qs.stringify({
-          email: email,
-          password: password,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+    if (Platform.OS === "web") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/users/login",
+          qs.stringify({
+            email: email,
+            password: password,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const username = response.data.username;
+          const userId = response.data.userId;
+          const auth = response.data.authenticated;
+
+          if (Platform.OS === "web") {
+            localStorage.setItem("username", username);
+            localStorage.setItem("userId", userId);
+            localStorage.setItem("auth", auth);
+          } else {
+            await AsyncStorage.setItem("token", response.data.token);
+            await AsyncStorage.setItem("username", username);
+            await AsyncStorage.setItem("userId", userId);
+            await AsyncStorage.setItem("auth", auth);
+          }
+        } else {
+          setError("Falha na autenticação");
         }
-      );
-
-      if (response.status == 200) {
-    
-        navigation.navigate("Main");
-      } else {
-
-        console.error("Falha na autenticação");
+      } catch (error) {
+        setError("Erro na autenticação");
       }
-    } catch (error) {
-      console.error("Erro ao tentar autenticar", error);
+    } else {
+      navigation.navigate("Main");
     }
   }
 
@@ -60,6 +93,8 @@ export default function Login({ navigation }) {
         onChangeText={(text) => setPassword(text)}
       />
 
+      {error !== "" && <Text style={styles.errorText}>{error}</Text>}
+
       <Button
         mode="contained"
         onPress={handleLogin}
@@ -77,5 +112,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     justifyContent: "center",
+  },
+  errorText: {
+    color: "red",
+    marginTop: 10,
+    fontSize: 18,
   },
 });

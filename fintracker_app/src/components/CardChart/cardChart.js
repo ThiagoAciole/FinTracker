@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Divider, Card, Text } from "react-native-paper";
 import { ProgressCircle } from "react-native-svg-charts";
 import { useState, useEffect } from "react";
-// Componente ProgressCircleChart
+
 const ProgressCircleChart = ({ ganhos, gastos }) => {
   const [percentualGastos, setPercentualGastos] = useState(0);
   const [percentualGanhos, setPercentualGanhos] = useState(0);

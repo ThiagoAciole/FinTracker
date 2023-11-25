@@ -1,9 +1,11 @@
 package com.example.fintracker.service;
 
-
 import com.example.fintracker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthService {
@@ -15,8 +17,19 @@ public class AuthService {
         this.userService = userService;
     }
 
-    public boolean authenticate(String email, String password) {
+    public Map<String, Object> authenticateAndGetUserInfo(String email, String password) {
         User user = userService.getUserByEmail(email);
-        return user != null && user.getPassword().equals(password);
+        Map<String, Object> authResult = new HashMap<>();
+
+        if (user != null && user.getPassword().equals(password)) {
+            authResult.put("authenticated", true);
+            authResult.put("userId", user.getId());
+            authResult.put("username", user.getUsername());
+            // Adicione outros campos que você deseja incluir na resposta
+        } else {
+            authResult.put("authenticated", false);
+        }
+
+        return authResult;
     }
 }

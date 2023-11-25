@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -27,12 +29,12 @@ public class UserController {
         this.authService = authService;
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        if (authService.authenticate(email, password)) {
-            return ResponseEntity.ok("Login successful");
-
+    public ResponseEntity<Map<String, Object>> login(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> authResponse = authService.authenticateAndGetUserInfo(email, password);
+        if ((boolean) authResponse.get("authenticated")) {
+            return ResponseEntity.ok(authResponse);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authResponse);
         }
     }
     @PostMapping("/register")

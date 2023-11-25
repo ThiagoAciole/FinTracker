@@ -5,13 +5,17 @@ import CardChart from "../../components/CardChart/cardChart";
 import Historic from "../../components/HistoricDespesas/historic";
 import FormsDialog from "../../components/FormsDialog/FormsDialog";
 import CardHistoric from "../../components/HistoricDespesas/CardHistoric/CardHistoric";
-import Empty from "../../../assets/empty.png"
+import Empty from "../../../assets/empty.png";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
+
+import { Platform } from "react-native";
+
 export default function Home() {
   const [visible, setVisible] = useState(false);
   const [entries, setEntries] = useState([]);
   const [ganhos, setGanhos] = useState(0);
   const [despesas, setDespesas] = useState(0);
-
+  const [username, setUsername] = useState("ThiagoAciole");
   const showDialog = () => setVisible(true);
 
   const hideDialog = () => setVisible(false);
@@ -19,6 +23,8 @@ export default function Home() {
   const addEntry = (entry) => {
     setEntries([...entries, entry]);
   };
+
+  
 
   useEffect(() => {
     entries.map((e) => {
@@ -41,7 +47,7 @@ export default function Home() {
             Bem Vindo,
           </Text>
           <Text variant="headlineMedium" style={{ fontWeight: 700 }}>
-            ThiagoAciole
+            {username}
           </Text>
         </View>
         <View
@@ -61,8 +67,8 @@ export default function Home() {
                 style={{
                   flex: 1,
                   justifyContent: "center",
-
                   alignSelf: "center",
+                  height: 100,
                 }}
               />
             )}
@@ -88,7 +94,7 @@ export default function Home() {
           position: "absolute",
           bottom: 0,
           right: 0,
-        
+
           backgroundColor: "#4169E1",
         }}
         icon="plus"
