@@ -42,6 +42,10 @@ Além disso, possibilita o registro de contas bancárias e cartões para o geren
 3. Instale as dependências: `npm install`
 4. Inicie o aplicativo: `react-native run-android` ou `react-native run-ios`
 
+## Desenvolvedores 
+https://github.com/ThiagoAciole
+https://github.com/ViniRodrigBarros
+
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas (issues) e enviar pull requests para melhorar o FinTracker.
