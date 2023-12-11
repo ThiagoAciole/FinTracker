@@ -45,6 +45,8 @@ Além disso, possibilita o registro de contas bancárias e cartões para o geren
 ## Desenvolvedores 
 https://github.com/ThiagoAciole
 https://github.com/ViniRodrigBarros
+https://github.com/Lucasnalvess
+https://github.com/Rafah01
 
 ## Contribuição
 
